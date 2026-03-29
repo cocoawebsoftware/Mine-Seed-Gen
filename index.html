@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>マイクラシード値Generator</title>
+<title>Minecraft Seed Generator</title>
 
 <style>
 body {
@@ -71,15 +71,30 @@ button:hover { background:#0ea5e9; }
         <option value="bedrock">統合版</option>
     </select>
 
+    <!-- 村 -->
     <label>
         <input type="checkbox" id="villageCheck"> 村付近にスポーン
     </label>
 
+    <div id="villageBox" class="hidden">
+        <label>村バイオーム</label>
+        <select id="villageBiome">
+            <option value="">指定なし</option>
+            <option value="plains">平原</option>
+            <option value="desert">砂漠</option>
+            <option value="savanna">サバンナ</option>
+            <option value="taiga">タイガ</option>
+            <option value="snowy">雪原</option>
+        </select>
+    </div>
+
+    <!-- バイオーム -->
     <label>
-        <input type="checkbox" id="biomeCheck"> バイオーム指定
+        <input type="checkbox" id="biomeCheck"> スポーンバイオーム指定
     </label>
 
     <div id="biomeBox" class="hidden">
+        <label>バイオーム</label>
         <select id="biome">
             <option value="plains">平原</option>
             <option value="forest">森</option>
