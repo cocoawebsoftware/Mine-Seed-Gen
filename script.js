@@ -8,14 +8,24 @@ const biomeCheck = document.getElementById("biomeCheck");
 const villageBox = document.getElementById("villageBox");
 const biomeBox = document.getElementById("biomeBox");
 
-// UI切り替え
-villageCheck.addEventListener("change", () => {
-    villageBox.classList.toggle("hidden");
-});
+// 安定UI制御
+function updateUI() {
+    if (villageCheck.checked) {
+        villageBox.classList.remove("hidden");
+    } else {
+        villageBox.classList.add("hidden");
+    }
 
-biomeCheck.addEventListener("change", () => {
-    biomeBox.classList.toggle("hidden");
-});
+    if (biomeCheck.checked) {
+        biomeBox.classList.remove("hidden");
+    } else {
+        biomeBox.classList.add("hidden");
+    }
+}
+
+updateUI();
+villageCheck.addEventListener("change", updateUI);
+biomeCheck.addEventListener("change", updateUI);
 
 // Java Random
 class JavaRandom {
@@ -63,17 +73,13 @@ function getBiome(seed, x, z) {
     return "snowy";
 }
 
-// 村＋バイオームチェック
+// 村＋バイオーム
 function checkVillage(seed, targetBiome) {
     for (let x = -5; x <= 5; x++) {
         for (let z = -5; z <= 5; z++) {
             if (hasVillage(seed, x, z)) {
-
                 const biome = getBiome(seed, x * 16, z * 16);
-
-                if (!targetBiome || biome === targetBiome) {
-                    return true;
-                }
+                if (!targetBiome || biome === targetBiome) return true;
             }
         }
     }
@@ -82,15 +88,8 @@ function checkVillage(seed, targetBiome) {
 
 // 条件
 function isValid(seed, options) {
-
-    if (options.village) {
-        if (!checkVillage(seed, options.villageBiome)) return false;
-    }
-
-    if (options.biome) {
-        if (getBiome(seed, 0, 0) !== options.biome) return false;
-    }
-
+    if (options.village && !checkVillage(seed, options.villageBiome)) return false;
+    if (options.biome && getBiome(seed, 0, 0) !== options.biome) return false;
     return true;
 }
 
@@ -105,9 +104,7 @@ async function findSeed(options) {
 
         tries++;
 
-        if (isValid(seed, options)) {
-            return { seed, tries };
-        }
+        if (isValid(seed, options)) return { seed, tries };
 
         if (tries % 500 === 0) {
             statusText.innerText = `探索中... ${tries}回`;
