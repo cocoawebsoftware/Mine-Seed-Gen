@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>マイクラシード値Generator</title>
+
+<style>
+body {
+    font-family: sans-serif;
+    background: #0f172a;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.container {
+    background: #1e293b;
+    padding: 25px;
+    border-radius: 15px;
+    width: 360px;
+}
+h1 { text-align:center; }
+
+input, select, button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+}
+
+select, input {
+    background: #334155;
+    color: white;
+}
+
+button {
+    background: #38bdf8;
+    font-weight: bold;
+    cursor: pointer;
+}
+button:hover { background:#0ea5e9; }
+
+.seed-box {
+    margin-top: 15px;
+    padding: 10px;
+    background: black;
+    border-radius: 8px;
+    word-break: break-all;
+}
+
+.status {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.hidden { display:none; }
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Seed Generator</h1>
+
+    <label>エディション</label>
+    <select id="edition">
+        <option value="java">Java版</option>
+        <option value="bedrock">統合版</option>
+    </select>
+
+    <label>
+        <input type="checkbox" id="villageCheck"> 村付近にスポーン
+    </label>
+
+    <label>
+        <input type="checkbox" id="biomeCheck"> バイオーム指定
+    </label>
+
+    <div id="biomeBox" class="hidden">
+        <select id="biome">
+            <option value="plains">平原</option>
+            <option value="forest">森</option>
+            <option value="savanna">サバンナ</option>
+            <option value="taiga">タイガ</option>
+            <option value="snowy">雪原</option>
+        </select>
+    </div>
+
+    <button id="generateBtn">探索開始</button>
+
+    <div class="seed-box" id="seed">---</div>
+    <div class="status" id="status">待機中</div>
+
+    <button id="copyBtn">コピー</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
