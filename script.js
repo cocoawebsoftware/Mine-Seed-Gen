@@ -2,15 +2,22 @@ const generateBtn = document.getElementById("generateBtn");
 const seedBox = document.getElementById("seed");
 const statusText = document.getElementById("status");
 
+const villageCheck = document.getElementById("villageCheck");
 const biomeCheck = document.getElementById("biomeCheck");
+
+const villageBox = document.getElementById("villageBox");
 const biomeBox = document.getElementById("biomeBox");
 
-// UI
+// UI切り替え
+villageCheck.addEventListener("change", () => {
+    villageBox.classList.toggle("hidden");
+});
+
 biomeCheck.addEventListener("change", () => {
     biomeBox.classList.toggle("hidden");
 });
 
-// Java Random再現
+// Java Random
 class JavaRandom {
     constructor(seed) {
         this.seed = (BigInt(seed) ^ 0x5DEECE66Dn) & ((1n << 48n) - 1n);
@@ -26,7 +33,7 @@ class JavaRandom {
     }
 }
 
-// 村判定（簡易）
+// 村判定
 function hasVillage(seed, chunkX, chunkZ) {
     const spacing = 32;
     const separation = 8;
@@ -45,16 +52,6 @@ function hasVillage(seed, chunkX, chunkZ) {
             chunkZ % spacing === offsetZ);
 }
 
-// スポーン周辺
-function checkVillage(seed) {
-    for (let x = -5; x <= 5; x++) {
-        for (let z = -5; z <= 5; z++) {
-            if (hasVillage(seed, x, z)) return true;
-        }
-    }
-    return false;
-}
-
 // 疑似バイオーム
 function getBiome(seed, x, z) {
     const val = Math.sin((x + seed) * 0.01) + Math.cos((z - seed) * 0.01);
@@ -66,37 +63,52 @@ function getBiome(seed, x, z) {
     return "snowy";
 }
 
-// 条件
-function isValid(seed, biome, needVillage) {
-    if (needVillage && !checkVillage(seed)) return false;
+// 村＋バイオームチェック
+function checkVillage(seed, targetBiome) {
+    for (let x = -5; x <= 5; x++) {
+        for (let z = -5; z <= 5; z++) {
+            if (hasVillage(seed, x, z)) {
 
-    if (biome) {
-        if (getBiome(seed, 0, 0) !== biome) return false;
+                const biome = getBiome(seed, x * 16, z * 16);
+
+                if (!targetBiome || biome === targetBiome) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+// 条件
+function isValid(seed, options) {
+
+    if (options.village) {
+        if (!checkVillage(seed, options.villageBiome)) return false;
+    }
+
+    if (options.biome) {
+        if (getBiome(seed, 0, 0) !== options.biome) return false;
     }
 
     return true;
 }
 
-// 非同期探索（フリーズ防止）
+// 非同期探索
 async function findSeed(options) {
     let tries = 0;
 
     while (true) {
-        let seed;
-
-        if (options.edition === "java") {
-            seed = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-        } else {
-            seed = Math.floor(Math.random() * 4294967295);
-        }
+        let seed = (options.edition === "java")
+            ? Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
+            : Math.floor(Math.random() * 4294967295);
 
         tries++;
 
-        if (isValid(seed, options.biome, options.village)) {
+        if (isValid(seed, options)) {
             return { seed, tries };
         }
 
-        // UI更新
         if (tries % 500 === 0) {
             statusText.innerText = `探索中... ${tries}回`;
             await new Promise(r => setTimeout(r, 0));
@@ -104,15 +116,20 @@ async function findSeed(options) {
     }
 }
 
-// ボタン
+// 実行
 generateBtn.addEventListener("click", async () => {
     seedBox.innerText = "---";
     statusText.innerText = "探索開始...";
 
     const options = {
         edition: document.getElementById("edition").value,
-        village: document.getElementById("villageCheck").checked,
-        biome: biomeCheck.checked ? document.getElementById("biome").value : null
+        village: villageCheck.checked,
+        villageBiome: villageCheck.checked
+            ? document.getElementById("villageBiome").value
+            : null,
+        biome: biomeCheck.checked
+            ? document.getElementById("biome").value
+            : null
     };
 
     const result = await findSeed(options);
