@@ -6,31 +6,65 @@
 <title>Minecraft Seed Gen</title>
 
 <style>
+* { box-sizing: border-box; }
+
 body {
     font-family: sans-serif;
     background: #0f172a;
     color: white;
+    margin: 0;
+    padding: 20px;
     display: flex;
     justify-content: center;
-    padding: 20px;
 }
+
 .container {
     background: #1e293b;
     padding: 20px;
     border-radius: 15px;
-    max-width: 420px;
     width: 100%;
+    max-width: 420px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
+
+h1 {
+    text-align: center;
+    font-size: 22px;
+}
+
 input, select, button {
     width: 100%;
     margin-top: 8px;
     padding: 10px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: none;
 }
-button { background: #38bdf8; }
+
+select, input {
+    background: #334155;
+    color: white;
+}
+
+button {
+    background: #38bdf8;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.seed-box {
+    margin-top: 15px;
+    padding: 12px;
+    background: black;
+    border-radius: 10px;
+}
+
+.status {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 5px;
+}
+
 .hidden { display:none; }
-.seed-box { background:black; padding:10px; margin-top:10px; }
 </style>
 </head>
 
@@ -39,23 +73,28 @@ button { background: #38bdf8; }
     <h1>Seed Gen</h1>
 
     <select id="edition">
-        <option value="java">Java</option>
-        <option value="bedrock">Bedrock</option>
+        <option value="java">Java版</option>
+        <option value="bedrock">統合版</option>
     </select>
 
-    <label><input type="checkbox" id="villageCheck"> 村</label>
+    <label><input type="checkbox" id="villageCheck"> 村付近にスポーン</label>
+
     <div id="villageBox" class="hidden">
         <select id="villageBiome">
             <option value="">指定なし</option>
             <option value="plains">平原</option>
             <option value="desert">砂漠</option>
+            <option value="savanna">サバンナ</option>
+            <option value="taiga">タイガ</option>
+            <option value="snowy">雪原</option>
         </select>
     </div>
 
-    <button id="generateBtn">探索</button>
+    <button id="generateBtn">探索開始</button>
+    <button id="stopBtn">停止</button>
 
     <div id="seed" class="seed-box">---</div>
-    <div id="status">待機中</div>
+    <div id="status" class="status">待機中</div>
 </div>
 
 <script src="script.js"></script>
