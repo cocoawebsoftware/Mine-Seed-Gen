@@ -24,17 +24,11 @@ body {
     border-radius: 15px;
     width: 100%;
     max-width: 420px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
 h1 {
     text-align: center;
     font-size: 22px;
-    margin-bottom: 15px;
-}
-
-label {
-    font-size: 14px;
 }
 
 input, select, button {
@@ -43,7 +37,6 @@ input, select, button {
     padding: 10px;
     border-radius: 10px;
     border: none;
-    font-size: 14px;
 }
 
 select, input {
@@ -55,11 +48,6 @@ button {
     background: #38bdf8;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.2s;
-}
-
-button:hover {
-    background:#0ea5e9;
 }
 
 .seed-box {
@@ -68,27 +56,14 @@ button:hover {
     background: black;
     border-radius: 10px;
     word-break: break-all;
-    font-size: 14px;
 }
 
 .status {
-    margin-top: 6px;
     font-size: 12px;
     color: #94a3b8;
 }
 
-.hidden {
-    display: none;
-}
-
-/* モバイル最適化 */
-@media (max-width: 480px) {
-    h1 { font-size: 18px; }
-    input, select, button {
-        font-size: 13px;
-        padding: 9px;
-    }
-}
+.hidden { display: none; }
 </style>
 </head>
 
@@ -96,18 +71,14 @@ button:hover {
 <div class="container">
     <h1>Seed Gen</h1>
 
-    <label>エディション</label>
     <select id="edition">
         <option value="java">Java版</option>
         <option value="bedrock">統合版</option>
     </select>
 
-    <label>
-        <input type="checkbox" id="villageCheck"> 村付近にスポーン
-    </label>
+    <label><input type="checkbox" id="villageCheck"> 村付近</label>
 
     <div id="villageBox" class="hidden">
-        <label>村バイオーム</label>
         <select id="villageBiome">
             <option value="">指定なし</option>
             <option value="plains">平原</option>
@@ -118,12 +89,9 @@ button:hover {
         </select>
     </div>
 
-    <label>
-        <input type="checkbox" id="biomeCheck"> スポーンバイオーム指定
-    </label>
+    <label><input type="checkbox" id="biomeCheck"> バイオーム指定</label>
 
     <div id="biomeBox" class="hidden">
-        <label>バイオーム</label>
         <select id="biome">
             <option value="plains">平原</option>
             <option value="forest">森</option>
@@ -133,7 +101,7 @@ button:hover {
         </select>
     </div>
 
-    <button id="generateBtn">探索開始</button>
+    <button id="generateBtn">探索</button>
 
     <div class="seed-box" id="seed">---</div>
     <div class="status" id="status">待機中</div>
